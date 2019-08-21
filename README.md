@@ -28,11 +28,16 @@ Laboratorio 2 de ARSW Immortal Case
 
             > Antes de la implementación:
 
-            //inserte imagen 1
+            <p align="center">
+            <img src="https://drive.google.com/uc?export=view&id=1XWMmWzQPHzCafh0lGlWsafkiGkJu9mJZ" />
+            </p>
 
             > Despues de la implementación:
 
-            //inserte imagen 1
+            <p align="center">
+            <img src="https://drive.google.com/uc?export=view&id=1AQkpQVzu-nb8c6x-UASQS2q_6NVemh_t" />
+            </p>
+
         ```java
         public void run() {
                 while (true) {
@@ -60,9 +65,12 @@ Laboratorio 2 de ARSW Immortal Case
 
         + **Make the producer now produce very fast, and the consumer consumes slow. Taking into account that the producer knows a Stock limit (how many elements he should have, at most in the queue), make that limit be respected. Review the API of the collection used as a queue to see how to ensure that this limit is not exceeded. Verify that, by setting a small limit for the 'stock', there is no high CPU consumption or errors.**
 
-            > Despues de la implementación:
+            > Despues de la implementación, con el productor rapido pero el consumidor lento osea sin el cambio, se vuelve el mal uso de cpu porque el consumidor e el que tiene el poder de reducir aunque consumidor si se puede optimizar pero no varia mucho
 
-            //inserte imagen 1
+            <p align="center">
+            <img src="https://drive.google.com/uc?export=view&id=1un5Qe66ixn31B56L-PTen9GIcZg-sLKA" />
+            </p>
+
             ```java
             public void run() {
                 while (true) {
@@ -90,3 +98,8 @@ Laboratorio 2 de ARSW Immortal Case
                 }
             }
             ```
+            > Consumidor y Productor Mejorados
+
+            <p align="center">
+            <img src="https://drive.google.com/uc?export=view&id=1vAE4RilImYmcUCGyMQj5J_s37glEnI87" />
+            </p>
