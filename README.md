@@ -106,7 +106,7 @@ Laboratorio 2 de ARSW Immortal Case
         ----
 
     + ## **Part 2:**
-        + **Review the code and identify how the functionality indicated above was implemented**
+        + **1-2. Review the code and identify how the functionality indicated above was implemented**
             + **You have N immortal players.**
 
                 > En la clase controlador **ControlFrame** especificamente aca:
@@ -166,11 +166,11 @@ Laboratorio 2 de ARSW Immortal Case
 
             > Despues de varios minutos el programa nunca termina, osea los 3 inmortales nunca podran terminar y nunca habra un ganador.
 
-        + **Given the intention of the game, an invariant should be that the sum of the life points of all players is always the same (of course, in an instant of time in which a time increase / reduction operation is not in process ). For this case, for N players, what should this value be?**
+        + **2. Given the intention of the game, an invariant should be that the sum of the life points of all players is always the same (of course, in an instant of time in which a time increase / reduction operation is not in process ). For this case, for N players, what should this value be?**
 
             > Deberia ser **(N x health)** de cada inmortal.
 
-        + **Run the application and verify how the ‘pause and check’ option works. Is the invariant fulfilled?**
+        + **3. Run the application and verify how the ‘pause and check’ option works. Is the invariant fulfilled?**
 
             > Como se ve en la imagen se verifico **"pause and check"** El invariante no se cumple. aunque la suma de la salud total si sea la de los N inmortales aun en juego, 
             ese valor va subiendo o bajando (osea variando) con el paso del tiempo. Como se muestra en las siguientes dos imagenes donde la suma total varia.
@@ -180,4 +180,6 @@ Laboratorio 2 de ARSW Immortal Case
         <img src="https://drive.google.com/uc?export=view&id=1zQN3UgKF6FBxso-LmiBF67bN9n5pOJrQ" />
         </p>
 
-        + **A first hypothesis that the race condition for this function (pause and check) is presented is that the program consults the list whose values ​​it will print, while other threads modify their values. To correct this, do whatever is necessary so that, before printing the current results, all other threads are paused. Additionally, implement the ‘resume’ option.**
+        + **4. A first hypothesis that the race condition for this function (pause and check) is presented is that the program consults the list whose values ​​it will print, while other threads modify their values. To correct this, do whatever is necessary so that, before printing the current results, all other threads are paused.**
+
+            + **Additionally, implement the ‘resume’ option.**
