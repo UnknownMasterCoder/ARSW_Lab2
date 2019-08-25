@@ -68,18 +68,17 @@ public class Immortal extends Thread {
     }
 
     public void fight(Immortal i2) {
-
-        if (i2.getHealth() > 0) {
-            i2.changeHealth(i2.getHealth() - defaultDamageValue);
-            this.health += defaultDamageValue;
-            updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
-        } else {
-            updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+        synchronized(immortalsPopulation){
+            if (i2.getHealth() > 0) {
+                i2.changeHealth(i2.getHealth() - defaultDamageValue);
+                this.health += defaultDamageValue;
+                updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
+            } else {
+                updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+            }
         }
     }
 
-    
- 
     public void pause() throws InterruptedException{
         isPaused=true;
     }
@@ -89,15 +88,27 @@ public class Immortal extends Thread {
         synchronized(lock){
             lock.notifyAll();
         }
-        
+    }
+    
+    public void parar(){
+        stopped = true;
+        isPaused = true;
+        synchronized(lock){
+            lock.notifyAll();
+        }
     }
 
     public void changeHealth(int v) {
         health = v;
+        if (health==0){
+            immortalsPopulation.remove(this);
+            this.parar();
+        }
     }
 
     public int getHealth() {
         return health;
+        
     }
 
     @Override

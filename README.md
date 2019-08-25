@@ -279,3 +279,94 @@ Laboratorio 2 de ARSW Immortal Case
         <img src=".\img\5-2.PNG" />
         <img src=".\img\5-3.PNG" />
         </p>
+
+        + **6. Identify possible critical regions in regards to the fight of the immortals. Implement a blocking strategy that avoids race conditions. Remember that if you need to use two or more ‘locks’ simultaneously, you can use nested synchronized blocks** 
+
+        > hay que sincronizar la lista de inmortales que extrae dentro de inmortal en el metodo de pelea.
+
+                ```java
+                public void fight(Immortal i2) {
+                        synchronized(immortalsPopulation){
+                        if (i2.getHealth() > 0) {
+                                i2.changeHealth(i2.getHealth() - defaultDamageValue);
+                                this.health += defaultDamageValue;
+                                updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
+                        } else {
+                                updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+                        }
+                        }
+                }
+                ```
+
+        + **7. After implementing your strategy, start running your program, and pay attention to whether it comes to a halt. If so, use the jps and jstack programs to identify why the program stopped.**
+
+        > el programa no para con la implementacion correcta en el punto 4.
+
+        + **8. Consider a strategy to correct the problem identified above (you can review Chapter 15 of Java Concurrency in Practice again).**
+
+        > no hay ningun problema en el punto anterior con la implementación.
+
+        + **9. Once the problem is corrected, rectify that the program continues to function consistently when 100, 1000 or 10000 immortals are executed. If in these large cases the invariant begins to be breached again, you must analyze what was done in step 4.**
+
+            + ### **100 Inmortals**
+            <p align="center">
+            Los recursos con 100 Inmortales (hilos) se comportan bien
+            <img src=".\img\9-100.PNG" />
+            El invariante aun se cumple
+            <img src=".\img\9-100-1.PNG" />
+            <img src=".\img\9-100-2.PNG" />
+            Cuando se pausa efectiamente para los 100 hilos
+            <img src=".\img\9-100-pause.PNG" />
+            </p>
+            
+            ----
+
+            + ### **1000 Inmortals**
+            <p align="center">
+            Los recursos con 100 Inmortales (hilos) se comportan bien
+            <img src=".\img\9-1000.PNG" />
+            El invariante aun se cumple
+            <img src=".\img\9-1000-1.PNG" />
+            <img src=".\img\9-1000-2.PNG" />
+            Cuando se pausa efectiamente para los 1000 hilos
+            <img src=".\img\9-1000-pause.PNG" />
+            </p>
+
+            ----
+
+            + ### **10000 Inmortals**
+              <p align="center">
+            Los recursos con 100 Inmortales (hilos) se comportan bien
+            <img src=".\img\9-10000.PNG" />
+            El invariante aun se cumple
+            <img src=".\img\9-10000-1.PNG" />
+            <img src=".\img\9-10000-2.PNG" />
+            Cuando se pausa efectiamente para los 10000 hilos
+            <img src=".\img\9-10000-pause.PNG" />
+            </p>
+
+        + **10. An annoying element for the simulation is that at a certain point in it there are few living 'immortals' making failed fights with 'immortals' already dead. It is necessary to suppress the immortal dead of the simulation as they die.**
+
+            + **Analyzing the simulation operation scheme, could this create a race condition? Implement the functionality, run the simulation and see what problem arises when there are many 'immortals' in it.**
+            > Efectivamente Los inmortales pelean con otros que ya estan muertos y es algo molesto, para esto habria que crearles una condicion que simplemente se vayan eliminando de la lista cuando su vida dea 0.
+            <p align="center">
+            <img src=".\img\10-1.PNG" />
+
+            </p>
+            + **Correct the previous problem WITHOUT using synchronization, since making access to the shared list of immortals sequential would make simulation extremely slow.**
+
+            > Simplemente en changeHealth se remueve de la lista de **immortalsPopulation**
+
+            ```java
+            public void changeHealth(int v) {
+                health = v;
+                if (health==0){
+                    immortalsPopulation.remove(this);
+                }
+            }
+            ```
+
+        + 11. **To finish, implement the STOP option.**
+
+
+
