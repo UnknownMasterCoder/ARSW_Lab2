@@ -45,15 +45,15 @@ Laboratorio 2 de ARSW Immortal Case
                                 int elem = queue.poll();
                                 System.out.println("Consumer consumes " + elem);
                                 try {
-                                Thread.sleep(1000);
+                                        Thread.sleep(1000);
                                 } catch (InterruptedException ex) {
-                                Logger.getLogger(StartProduction.class.getName()).log(Level.SEVERE, null, ex);
+                                        Logger.getLogger(StartProduction.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                         } else {
                                 try {
-                                queue.wait();
+                                        queue.wait();
                                 } catch (InterruptedException ex) {
-                                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+                                        Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                         }
                         synchronized (queue) {
@@ -80,15 +80,15 @@ Laboratorio 2 de ARSW Immortal Case
                                 System.out.println("Producer added " + dataSeed);
                                 queue.add(dataSeed);
                                 try {
-                                Thread.sleep(1000);
+                                        Thread.sleep(1000);
                                 } catch (InterruptedException ex) {
-                                Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+                                        Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                         } else {
                                 try {
-                                queue.wait();
+                                        queue.wait();
                                 } catch (InterruptedException ex) {
-                                Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+                                        Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                         }
                         synchronized (queue) {
@@ -182,4 +182,100 @@ Laboratorio 2 de ARSW Immortal Case
 
         + **4. A first hypothesis that the race condition for this function (pause and check) is presented is that the program consults the list whose values ​​it will print, while other threads modify their values. To correct this, do whatever is necessary so that, before printing the current results, all other threads are paused.**
 
+            > ## **class ControlFrame**
+
+            > La logica está bien simplemente hacer un control con un try-cath y agregar una iteración  de inmortals donde se llama al metodo de **pause()**
+            
+            ```java
+            Button btnPauseAndCheck = new JButton("Pause and check");
+            tnPauseAndCheck.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                   try{
+                        int sum = 0;
+                        for (Immortal inmo : immortals) {
+                                inmo.pause();
+                   }
+                   sum = immortals.stream().map((inmo) -> inmo.getHealth()).reduce(sum, Integer::sum);
+                   statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
+                   }
+                   catch (InterruptedException ex) {
+                           Logger.getLogger(ControlFrame.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+            
+            );                
+            ```
+
+            > ## **class Inmortal**
+
+            > se implementaran 3 nuevas variables que nos ayudaran a tomar el control de un Inmortal
+
+            ```java
+            this.isPaused = false; //para saber si esta pausado
+            this.stopped = false; //para levar el control de pararlo
+            this.lock = new Object(); //un nuevo objeto que estara ligado a inmortal y poder sincronizarlo mas facilmente
+            ```
+
+            >la implementacion del metodo pause que simplemente es un cambio de stado de la variable isPaused
+
+            ```java
+            public void pause() throws InterruptedException{
+                isPaused=true;
+            }
+            ```
+
+            >se cambio un poco el metodo **run()** para que ahora se lleve el control del metodo **pause and check**  en vez del while(true) se hacen dos while donde el primero controlara la parada del programa y el segundo si se esta en pausa. Tambien la corrección Para que los hios no modifiquen valores mientras se esta pausado:
+
+            ```java
+            public void run() {
+                while (!stopped){
+                        while (!isPaused) {    
+                                .
+                                .
+                                .
+                        }
+                }
+                //sincronizamos y hacemos que espere con wait() por medio de la variable lock que creamos para llevar el control del objeto inmortal
+                synchronized(lock){
+                        try {
+                                lock.wait();
+                        } catch (InterruptedException ex) {
+                                Logger.getLogger(Immortal.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                }
+            }
+            ```
             + **Additionally, implement the ‘resume’ option.**
+
+                > ## **class ControlFrame**
+
+                > Simplemente es iterar sobra la lista de inmortals y llamar a su funcion resumir
+                ```java
+                JButton btnResume = new JButton("Resume");
+                btnResume.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                        immortals.forEach((inmo) -> {
+                        inmo.resumir();
+                        });
+                }
+                });
+                ```
+
+                > ## **class Inmortal**
+                ```java
+                public void resumir(){
+                        isPaused=false;
+                        synchronized(lock){
+                                lock.notifyAll();
+                        }
+                        
+                }
+                ```
+        + **5. Check the operation again (click the button many times). Is the invariant fulfilled or not ?.**
+
+        > Aun no se cumple el invariante muy bien, si es la suma de N inmortales que hay en juego pero esa sumatoria esta incrementando
+
+        <p align="center">
+        <img src=".\img\5-1.PNG" />
+        <img src=".\img\5-2.PNG" />
+        <img src=".\img\5-3.PNG" />
+        </p>

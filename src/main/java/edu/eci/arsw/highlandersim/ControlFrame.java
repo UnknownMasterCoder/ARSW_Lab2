@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JScrollBar;
 
 public class ControlFrame extends JFrame {
@@ -87,19 +89,17 @@ public class ControlFrame extends JFrame {
         JButton btnPauseAndCheck = new JButton("Pause and check");
         btnPauseAndCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-                /*
-				 * COMPLETAR
-                 */
-                int sum = 0;
-                for (Immortal im : immortals) {
-                    sum += im.getHealth();
+                try{
+                    int sum = 0;
+                    for (Immortal inmo : immortals) {
+                        inmo.pause();
+                    }
+                    sum = immortals.stream().map((inmo) -> inmo.getHealth()).reduce(sum, Integer::sum);
+                    statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
                 }
-
-                statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
-                
-                
-
+                catch (InterruptedException ex) {
+                        Logger.getLogger(ControlFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         toolBar.add(btnPauseAndCheck);
@@ -108,10 +108,9 @@ public class ControlFrame extends JFrame {
 
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * IMPLEMENTAR
-                 */
-
+                immortals.forEach((inmo) -> {
+                    inmo.resumir();
+                });
             }
         });
 
