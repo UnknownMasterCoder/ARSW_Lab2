@@ -351,8 +351,8 @@ Laboratorio 2 de ARSW Immortal Case
             > Efectivamente Los inmortales pelean con otros que ya estan muertos y es algo molesto, para esto habria que crearles una condicion que simplemente se vayan eliminando de la lista cuando su vida dea 0.
             <p align="center">
             <img src=".\img\10-1.PNG" />
-
             </p>
+
             + **Correct the previous problem WITHOUT using synchronization, since making access to the shared list of immortals sequential would make simulation extremely slow.**
 
             > Simplemente en changeHealth se remueve de la lista de **immortalsPopulation**
@@ -366,7 +366,7 @@ Laboratorio 2 de ARSW Immortal Case
             }
             ```
 
-        + 11. **To finish, implement the STOP option.**
+        + **11. To finish, implement the STOP option.**
 
 
 
