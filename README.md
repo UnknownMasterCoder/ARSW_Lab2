@@ -368,5 +368,15 @@ Laboratorio 2 de ARSW Immortal Case
 
         + **11. To finish, implement the STOP option.**
 
+            ```java
+                public void parar(){
+                        stopped = true;
+                        isPaused = true;
+                        synchronized(lock){
+                                lock.notifyAll();
+                        }
+                }
+            ```
+
 
 
